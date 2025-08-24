@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentFlow AI Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom color definitions for a blue professional theme */
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark-blue: #1e40af;
+            --accent-teal: #0d9488;
+            --accent-light-blue: #38bdf8;
+            --bg-main-start: #f0f9ff;
+            --bg-main-end: #e0f2fe;
+            --text-heading: #1e3a8a;
+            --text-body: #374151;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(37, 99, 235, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-main-start) 0%, var(--bg-main-end) 100%);
+            min-height: 100vh;
+            color: var(--text-body);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 8px 25px -5px var(--shadow-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e0e7ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal), var(--accent-light-blue));
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px -10px var(--shadow-color);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-dark-blue));
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            width: 1rem;
+            height: 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Floating elements */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 35px rgba(30, 58, 138, 0.15);
+            position: relative;
+            border: 1px solid #dbeafe;
+        }
+        
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-close-btn:hover {
+            transform: rotate(90deg);
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        /* Styling for the tables */
+        .table-auto {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table-auto th, .table-auto td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e7ff;
+        }
+        
+        .table-auto th {
+            background-color: #f8faff;
+            color: var(--primary-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .table-auto tbody tr:hover {
+            background-color: #f0f7ff;
+        }
+        
+        /* Decorative elements */
+        .decoration {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.08;
+        }
+        
+        .decoration-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 8rem;
+            color: var(--primary-blue);
+        }
+        
+        .decoration-2 {
+            bottom: 10%;
+            right: 5%;
+            font-size: 10rem;
+            color: var(--accent-teal);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #e0e7ff;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary-blue), var(--accent-teal));
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--primary-dark-blue), var(--accent-teal));
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative elements -->
+    <i class="fas fa-cloud decoration decoration-1 floating"></i>
+    <i class="fas fa-star decoration decoration-2 floating" style="animation-delay: 0.5s;"></i>
+    
+    <div class="container mx-auto p-4 sm:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800 mb-4">
+                <i class="fas fa-robot mr-3"></i>TalentFlow AI Dashboard
+            </h1>
+            <p class="text-lg text-blue-500">
+                <i class="fas fa-bolt mr-2"></i>Automasi proses rekrutmen dalam hitungan detik!
+            </p>
+        </header>
+
+        <main>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Card 1 -->
+                <div class="card p-6 flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-play-circle text-3xl text-blue-600"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-blue-800 mb-4">Jalankan Agen HRD</h2>
+                    <button id="runAgentBtn" onclick="runAgent()" class="btn-primary w-full">
+                        <i class="fas fa-play"></i>
+                        <span id="runAgentText">Jalankan Sekarang</span>
+                        <div id="runAgentSpinner" class="spinner hidden"></div>
+                    </button>
+                    <p class="mt-4 text-sm text-blue-500 text-center">
+                        <i class="fas fa-info-circle mr-1"></i>Memproses email lamaran baru dan memperbarui data.
+                    </p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="card p-6 flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-envelope text-3xl text-indigo-600"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-blue-800 mb-4">Lihat Daftar Email</h2>
+                    <button id="fetchEmailsBtn" onclick="fetchEmails()" class="btn-primary w-full">
+                        <i class="fas fa-sync-alt"></i>
+                        <span id="fetchEmailsText">Muat Ulang Email</span>
+                        <div id="fetchEmailsSpinner" class="spinner hidden"></div>
+                    </button>
+                    <p class="mt-4 text-sm text-blue-500 text-center">
+                        <i class="fas fa-info-circle mr-1"></i>Menampilkan daftar semua email lamaran pekerjaan.
+                    </p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card p-6 flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full bg-cyan-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-table text-3xl text-cyan-600"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-blue-800 mb-4">Lihat Data Calon</h2>
+                    <button id="fetchSheetDataBtn" onclick="fetchSheetData()" class="btn-primary w-full">
+                        <i class="fas fa-sync-alt"></i>
+                        <span id="fetchSheetDataText">Muat Ulang Data</span>
+                        <div id="fetchSheetDataSpinner" class="spinner hidden"></div>
+                    </button>
+                    <p class="mt-4 text-sm text-blue-500 text-center">
+                        <i class="fas fa-info-circle mr-1"></i>Menampilkan data kandidat dari Google Sheets.
+                    </p>
+                </div>
+            </div>
+
+            <div id="outputContainer" class="card p-6 mb-8">
+                <!-- Output will be displayed here -->
+            </div>
+            
+            <div id="resumeModal" class="modal-overlay hidden">
+                <div class="modal-content">
+                    <span class="modal-close-btn" onclick="closeResumeModal()">&times;</span>
+                    <h3 class="text-2xl font-bold text-blue-800 mb-4">
+                        <i class="fas fa-file-alt mr-2"></i>Teks Resume
+                    </h3>
+                    <div id="modalResumeText" class="whitespace-pre-wrap text-gray-700 bg-blue-50 p-4 rounded-lg"></div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="text-center mt-12 text-blue-500">
+            <p>Dibuat dengan <i class="fas fa-heart text-red-400"></i> oleh nabeera</p>
+        </footer>
+    </div>
+
+    <script>
+    const outputContainer = document.getElementById('outputContainer');
+    
+    // Fungsi umum untuk menangani panggilan API dan pembaruan UI
+    async function fetchData(url, method, spinnerId) {
+        const spinner = document.getElementById(spinnerId);
+        const btnText = document.getElementById(spinnerId.replace('Spinner', 'Text'));
+        
+        spinner.classList.remove('hidden');
+        btnText.classList.add('hidden');
+        
+        try {
+            const response = await fetch(url, { method: method });
+            const data = await response.json();
+            
+            if (url === '/run-hr-agent') {
+                displayAgentRunOutput(data);
+            } else if (url === '/get-emails') {
+                displayEmails(data.emails);
+            } else if (url === '/get-sheet-data') {
+                displaySheetData(data.sheet_data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            outputContainer.innerHTML = `
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <strong class="font-bold">Oops!</strong>
+                        <span class="block sm:inline ml-1">Terjadi kesalahan saat memuat data.</span>
+                    </div>
+                    <p class="mt-2 text-sm">${error.message || 'Silakan coba lagi nanti.'}</p>
+                </div>
+            `;
+        } finally {
+            spinner.classList.add('hidden');
+            btnText.classList.remove('hidden');
+        }
+    }
+
+    // Fungsi untuk menampilkan hasil dari /run-hr-agent
+    function displayAgentRunOutput(data) {
+        const summary = data.summary_message || 'Tidak ada ringkasan yang diberikan.';
+        const processed = data.processed_count || 0;
+        const scheduled = data.scheduled_count || 0;
+        const rejected = data.rejected_count || 0;
+
+        outputContainer.innerHTML = `
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold text-blue-800 mb-2">
+                    <i class="fas fa-tasks mr-2"></i>Ringkasan Proses Agen
+                </h3>
+                <p class="text-blue-600 bg-blue-50 p-4 rounded-lg">${summary}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg text-center border-2 border-blue-100">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-envelope-open-text text-blue-500"></i>
+                    </div>
+                    <p class="text-3xl font-bold text-blue-600">${processed}</p>
+                    <p class="text-sm text-blue-500">Email Diproses</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg text-center border-2 border-green-100">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-calendar-check text-green-500"></i>
+                    </div>
+                    <p class="text-3xl font-bold text-green-600">${scheduled}</p>
+                    <p class="text-sm text-green-500">Berhasil Dijadwalkan</p>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg text-center border-2 border-red-100">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-times-circle text-red-500"></i>
+                    </div>
+                    <p class="text-3xl font-bold text-red-600">${rejected}</p>
+                    <p class="text-sm text-red-500">Ditolak/Gagal</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Fungsi untuk menampilkan data email dari /get-emails
+    function displayEmails(emails) {
+        if (!emails || emails.length === 0) {
+            outputContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-inbox text-5xl text-blue-300 mb-4"></i>
+                    <p class="text-blue-400">Tidak ada email lamaran yang ditemukan.</p>
+                </div>
+            `;
+            return;
+        }
+
+        let tableHtml = `
+            <h3 class="text-2xl font-bold text-blue-800 mb-4">
+                <i class="fas fa-envelope mr-2"></i>Daftar Email Lamaran
+            </h3>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="table-auto min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-blue-500 uppercase tracking-wider">
+                                <i class="fas fa-user mr-1"></i>Pengirim
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-blue-500 uppercase tracking-wider">
+                                <i class="fas fa-tag mr-1"></i>Subjek
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-blue-500 uppercase tracking-wider">
+                                <i class="fas fa-info-circle mr-1"></i>Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+        `;
+        
+        emails.forEach(email => {
+            const statusColor = email.status === 'Belum Dibaca' ? 'text-red-600 font-bold' : 'text-green-600';
+            const statusIcon = email.status === 'Belum Dibaca' ? 'fa-envelope' : 'fa-envelope-open-text';
+            
+            tableHtml += `
+                <tr class="hover:bg-blue-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">${email.from}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${email.subject}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="${statusColor}">
+                            <i class="fas ${statusIcon} mr-1"></i>${email.status}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        tableHtml += `</tbody></table></div>`;
+        outputContainer.innerHTML = tableHtml;
+    }
+
+    // Fungsi untuk menampilkan data sheet dari /get-sheet-data
+    function displaySheetData(sheetData) {
+        if (!sheetData || sheetData.length <= 1) {
+            outputContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-table text-5xl text-blue-300 mb-4"></i>
+                    <p class="text-blue-400">Data kandidat di Google Sheet masih kosong.</p>
+                </div>
+            `;
+            return;
+        }
+
+        const headers = sheetData[0];
+        const rows = sheetData.slice(1);
+
+        let tableHtml = `
+            <h3 class="text-2xl font-bold text-blue-800 mb-4">
+                <i class="fas fa-users mr-2"></i>Data Calon Kandidat
+            </h3>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="table-auto min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            ${headers.map(header => `
+                                <th class="px-6 py-3 text-left text-xs font-medium text-blue-500 uppercase tracking-wider">
+                                    ${header}
+                                </th>
+                            `).join('')}
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+        `;
+        
+        rows.forEach(row => {
+            tableHtml += `<tr class="hover:bg-blue-50 transition-colors">`;
+            row.forEach((cell, index) => {
+                let cellContent = cell;
+                // Jika itu kolom resume (kolom ke-5, index 4) dan ada isinya
+                if (index === 4 && cell && cell.length > 50) { 
+                    const encodedText = encodeURIComponent(cell);
+                    cellContent = `
+                        <button onclick="openResumeModal('${encodedText}')" 
+                                class="text-blue-600 hover:text-blue-800 transition-colors flex items-center">
+                            <i class="fas fa-file-alt mr-1"></i>Lihat Resume
+                        </button>
+                    `;
+                }
+                tableHtml += `<td class="px-6 py-4 whitespace-nowrap">${cellContent}</td>`;
+            });
+            tableHtml += `</tr>`;
+        });
+        
+        tableHtml += `</tbody></table></div>`;
+        outputContainer.innerHTML = tableHtml;
+    }
+
+    function runAgent() {
+        fetchData('/run-hr-agent', 'POST', 'runAgentSpinner');
+    }
+
+    function fetchEmails() {
+        fetchData('/get-emails', 'GET', 'fetchEmailsSpinner');
+    }
+
+    function fetchSheetData() {
+        fetchData('/get-sheet-data', 'GET', 'fetchSheetDataSpinner');
+    }
+
+    function openResumeModal(encodedText) {
+        const modal = document.getElementById('resumeModal');
+        const modalTextDiv = document.getElementById('modalResumeText');
+        modalTextDiv.textContent = decodeURIComponent(encodedText);
+        modal.classList.remove('hidden');
+    }
+
+    function closeResumeModal() {
+        const modal = document.getElementById('resumeModal');
+        modal.classList.add('hidden');
+        document.getElementById('modalResumeText').textContent = '';
+    }
+
+    // Initial state on load
+    document.addEventListener('DOMContentLoaded', () => {
+        const outputContainer = document.getElementById('outputContainer');
+        const initialMessage = document.createElement('div');
+        initialMessage.className = 'text-center py-12';
+        initialMessage.innerHTML = `
+            <i class="fas fa-robot text-6xl text-blue-300 mb-4"></i>
+            <p class="text-xl text-blue-400">Selamat datang di TalentFlow AI Dashboard</p>
+            <p class="text-blue-300 mt-2">Klik tombol di atas untuk memulai</p>
+        `;
+        outputContainer.appendChild(initialMessage);
+        
+        // Load initial data
+        setTimeout(() => {
+            fetchEmails();
+            fetchSheetData();
+        }, 1000);
+    });
+
+    </script>
+</body>
+</html>
