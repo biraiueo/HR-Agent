@@ -52,7 +52,7 @@ Flask
 python-dotenv
 python-dateutil
 ```
-### How To Run
+### 3. How To Run
 After completing all configurations, run the program:
 ```bash
 python api.py
