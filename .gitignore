@@ -1,7 +1,10 @@
+# File Sensitif
 .env
 credentials.json
 token.json
+
+# Folder dan file yang dihasilkan oleh Python
 __pycache__/
 *.pyc
-.vscode/
 venv/
+.vscode/
