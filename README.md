@@ -2,6 +2,8 @@
 
 TalentFlow AI Agent is an automated assistant designed to accelerate the recruitment process. This project uses Google API integration and AI models to automate manual tasks, from detecting new job applications to scheduling interviews and storing candidate data.
 
+<img width="1882" height="1032" alt="Screenshot 2025-08-24 143405" src="https://github.com/user-attachments/assets/60ab7d6b-bdaa-4551-bfce-1c1e6efbb496" />
+
 ## ✨ Key Features
 
 - **📧 Automatic Email Processing**: Scans Gmail inboxes to detect new job application emails
