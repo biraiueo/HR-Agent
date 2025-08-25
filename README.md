@@ -36,7 +36,13 @@ The program is designed to run continuously. When executed, it performs the foll
 3. **AI Screening**: Analyzes extracted resume text to determine suitability level (VERY SUITABLE, SUITABLE, or LESS SUITABLE)
 4. **Take Action**:
    - **Candidate Passes**: For VERY SUITABLE or SUITABLE candidates, finds available slots in Google Calendar, schedules interview, and sends invitation email
+     
+     <img width="1280" height="554" alt="image" src="https://github.com/user-attachments/assets/8e820c16-1580-4a97-be40-4eece327334e" />
+     
    - **Candidate Rejected**: For LESS SUITABLE candidates, sends automatic rejection email
+     
+     <img width="1280" height="420" alt="image" src="https://github.com/user-attachments/assets/e4765c72-5b44-49c9-81f3-0ed86d981313" />
+
 5. **Record Data**: Automatically records candidate data, interview schedules, and resume summaries in Google Sheets
    
 <img width="1104" height="652" alt="image" src="https://github.com/user-attachments/assets/169d073e-11e1-4f9c-a2d4-d8ae828e5b65" />
