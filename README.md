@@ -12,6 +12,21 @@ TalentFlow AI Agent is an automated assistant designed to accelerate the recruit
 - **📅 Automated Scheduling**: Automatically schedules interviews in Google Calendar for qualified candidates
 - **💾 Automatic Data Recording**: Saves processed candidate data, including AI-generated resume summaries, to Google Sheets
 
+## 🛠️ Technologies Used 
+
+- **🐍 Python**: The brain of the operation. 
+- **🕸️ Flask**: For a simple, lightweight web API. 
+- **🤖 Google Gemini (via LangChain)**: The genius behind the screening and summarizing. 
+- **🔗 LangChain**: The framework that connects the AI to all its tools. 
+
+## 🛜 Google APIs
+
+- **✉️ Gmail API** For email magic. 
+- **📅 Google Calendar API**: For interview bookings. 
+- **📈 Google Sheets API**: For data storage. 
+- **📄 PyMuPDF**: The tool for reading those tricky PDF resumes. 
+- **🤫 python-dotenv**: To keep your secret keys safe.
+
 ## 🔄 Program Workflow
 
 The program is designed to run continuously. When executed, it performs the following steps:
