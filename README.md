@@ -26,7 +26,6 @@ The program is designed to run continuously. When executed, it performs the foll
    
 <img width="1104" height="652" alt="image" src="https://github.com/user-attachments/assets/169d073e-11e1-4f9c-a2d4-d8ae828e5b65" />
 
-
 ## 🛠️ Installation and Configuration
 
 ### 1. Credential Preparation
