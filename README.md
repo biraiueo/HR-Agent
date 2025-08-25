@@ -23,6 +23,9 @@ The program is designed to run continuously. When executed, it performs the foll
    - **Candidate Passes**: For VERY SUITABLE or SUITABLE candidates, finds available slots in Google Calendar, schedules interview, and sends invitation email
    - **Candidate Rejected**: For LESS SUITABLE candidates, sends automatic rejection email
 5. **Record Data**: Automatically records candidate data, interview schedules, and resume summaries in Google Sheets
+   
+<img width="1104" height="652" alt="image" src="https://github.com/user-attachments/assets/169d073e-11e1-4f9c-a2d4-d8ae828e5b65" />
+
 
 ## 🛠️ Installation and Configuration
 
@@ -60,3 +63,6 @@ After completing all configurations, run the program:
 python api.py
 ```
 Open your web browser and visit http://127.0.0.1:5000 to view the dashboard and operate the agent.
+
+<img width="1280" height="200" alt="image" src="https://github.com/user-attachments/assets/e1b9295b-929a-4e46-93f1-3279857818fc" />
+
